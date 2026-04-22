@@ -1,0 +1,31 @@
+services:
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: gemma4-webui
+    restart: unless-stopped
+
+    ports:
+      # Your browser → http://localhost:${WEBUI_PORT}
+      - "${WEBUI_PORT}:8080"
+
+    environment:
+      # Tell Open WebUI where Ollama is (your Mac, not inside Docker)
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
+      # Disable auth for local personal use — turn on later for team use
+      - WEBUI_AUTH=false
+
+    volumes:
+      # Persist chat history and settings on your Mac (not inside Docker)
+      - ${WEBUI_DATA}:/app/backend/data
+
+    # Resource limits — keeps Docker from eating your whole machine
+    deploy:
+      resources:
+        limits:
+          cpus: "2"       # Max 2 CPU cores for the UI container
+          memory: 1G      # Open WebUI is just a frontend — 1 GB is plenty
+
+    # Allows the container to reach Ollama on your Mac via host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

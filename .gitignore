@@ -1,0 +1,11 @@
+# Model weights and large data — don't commit these, they're huge
+data/
+
+# Environment overrides (safe to gitignore if you add secrets later)
+.env.local
+
+# macOS clutter
+.DS_Store
+
+# Docker leftovers
+*.log
